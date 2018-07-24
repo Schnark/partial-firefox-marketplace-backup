@@ -1,0 +1,1 @@
+See https://schnark.github.io/partial-firefox-marketplace-backup/index.html for the licenses of the apps in the backup folder. Feel free to use all the other stuff without any restriction (i.e. CC-0).

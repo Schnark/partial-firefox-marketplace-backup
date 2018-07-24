@@ -1,0 +1,1 @@
+{"name": "WebServer", "icons": {"128": "/img/icon-128.png", "512": "/img/icon-512.png"}, "version": "1.4", "package_path": "https://schnark.github.io/partial-firefox-marketplace-backup/backup/webserver-1.4.zip", "size": 112091, "release_notes": "Support for Firefox OS 2.6 (only tested in simulator)", "developer": {"name": "Alexander Sch\u00f6nberg"}}
