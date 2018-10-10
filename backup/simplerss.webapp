@@ -1,1 +1,79 @@
-{"name": "SimpleRSS", "icons": {"60": "/icons/rss-60.png", "48": "/icons/rss-48.png", "120": "/icons/rss-120.png", "64": "/icons/rss-64.png", "128": "/icons/rss-128.png", "90": "/icons/rss-90.png"}, "version": "1.2.0", "package_path": "https://schnark.github.io/partial-firefox-marketplace-backup/backup/simplerss-1.2.0.zip", "size": 532491, "release_notes": "", "developer": {"url": "http://simplerss.user1.be/", "name": "pumpkin"}}
+{
+
+    "version"     : "1.2.0",
+    "name"        : "SimpleRSS",
+    "description" : "SimpleRSS is a simple RSS/Atom client for Firefox OS.",
+
+    "developer": {
+        "name": "pumpkin",
+        "url": "http://simplerss.user1.be/"
+    },
+
+    "default_locale": "en",
+
+    "installs_allowed_from": ["*"],
+
+    "package_path": "https://schnark.github.io/partial-firefox-marketplace-backup/backup/simplerss-1.2.0.zip", "size": 532491,
+
+    "type" : "privileged",
+
+    "permissions" : {
+        "alarms": {
+            "description": "Required to schedule auto-refresh."
+        },
+        "desktop-notification": {
+            "description": "Notify user of new feeds."
+        },
+        "device-storage:sdcard" : {
+            "access": "readwrite",
+            "description": "Write export of all feeds on SD card as an OPML file."
+        },
+        "systemXHR" : {
+            "description": "Cross-domain requests needed to fetch rss, atom and opml files."
+        }
+    },
+
+    "messages": [
+        { "alarm": "/index.html" }
+    ],
+
+    "icons": {
+        "48"  : "/icons/rss-48.png",
+        "60"  : "/icons/rss-60.png",
+        "64"  : "/icons/rss-64.png",
+        "90"  : "/icons/rss-90.png",
+        "120" : "/icons/rss-120.png",
+        "128" : "/icons/rss-128.png"
+    },
+
+    "activities": {
+        "open": {
+            "filters": {
+                "type": [ "text/xml", "text/x-opml", "" ]
+            },
+            "href": "/index.html"
+        },
+        "save-bookmark": {
+            "filters": {
+                "type": "url",
+                "url": {
+                    "required": true
+                }
+            },
+            "href": "/index.html"
+        },
+        "share": {
+            "filters": {
+                "type": "url",
+                "url": {
+                    "required": true
+                },
+                "number": {
+                    "max": 1
+                }
+            },
+            "href": "/index.html"
+        }
+    }
+
+}
