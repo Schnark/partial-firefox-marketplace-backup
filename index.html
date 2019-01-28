@@ -76,6 +76,12 @@ dl {
 
 #apps li:target {
 	border-color: #00f;
+	background-color: #ffe;
+}
+
+#apps li:target:after {
+	content: "Please read the FAQ (linked on the top of the page) before installing!";
+	margin-left: 1em;
 }
 
 dt {
@@ -95,7 +101,7 @@ dt:before {
 </style>
 </head><body>
 <h1>Partial Firefox Marketplace Backup</h1>
-<p>Please read the <a href="faq.html">FAQ</a> if you are here for the first time.</p>
+<p>Please read the <a href="faq.html">FAQ</a> if you are here for the first time, especially before installing an app of type “privileged” or “keyboard”.</p>
 
 <ul id="apps">
 <li id="copy-paste-keyboard">
