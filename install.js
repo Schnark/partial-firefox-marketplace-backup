@@ -19,7 +19,8 @@ var fakeMozApps = {
 		});
 	},
 	installPackage: function (manifest) {
-		var isCorrectUrl = /^https:\/\/schnark.github.io\/partial-firefox-marketplace-backup\/backup\/.*\.webapp$/.test(manifest);
+		var isCorrectUrl =
+			/^https:\/\/schnark.github.io\/partial-firefox-marketplace-backup\/backup\/.*\.webapp$/.test(manifest);
 		return fakeMozApps._makeRequest(function () {
 			return [isCorrectUrl];
 		});
@@ -60,7 +61,9 @@ function updateButtons () {
 	}
 	buttons = document.getElementsByTagName('button');
 	for (i = 0; i < buttons.length; i++) {
-		updateButton(buttons[i]);
+		if (buttons[i].dataset.manifest) {
+			updateButton(buttons[i]);
+		}
 	}
 }
 
@@ -74,7 +77,7 @@ function updateButton (button) {
 	request = navigator.mozApps.checkInstalled(manifest);
 	request.onsuccess = function () {
 		if (request.result) {
-			button.innerHTML = 'Already installed!&nbsp;<span style="color: green;">✔</span>'
+			button.innerHTML = 'Already installed!&nbsp;<span style="color: green;">✔</span>';
 		} else {
 			button.addEventListener('click', function () {
 				button.disabled = true;
@@ -84,7 +87,7 @@ function updateButton (button) {
 					button.innerHTML = 'An error occured';
 				};
 				request.onsuccess = function () {
-					button.innerHTML = 'Successfully installed!&nbsp;<span style="color: green;">✔</span>'
+					button.innerHTML = 'Successfully installed!&nbsp;<span style="color: green;">✔</span>';
 				};
 			});
 			button.innerHTML = 'Install';
@@ -94,5 +97,8 @@ function updateButton (button) {
 }
 
 updateButtons();
+if (location.search === '?debug') {
+	document.getElementsByTagName('body')[0].className = 'debug';
+}
 
 })();
