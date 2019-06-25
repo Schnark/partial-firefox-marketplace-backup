@@ -1,6 +1,8 @@
 (function () {
 "use strict";
 
+var base = 'https://schnark.github.io/';
+
 /*
 var fakeMozApps = {
 	checkInstalled: function (manifest) {
@@ -49,9 +51,21 @@ navigator.mozApps = fakeMozApps;
 
 function makeAbsolute (url) {
 	if (url.indexOf('/') === -1) {
-		url = 'https://schnark.github.io/partial-firefox-marketplace-backup/backup/' + url;
+		url = base + 'partial-firefox-marketplace-backup/backup/' + url;
 	}
 	return url;
+}
+
+function checkInstalled (manifest, callback) {
+	var request;
+	if (manifest.slice(0, base.length) === base) {
+		request = navigator.mozApps.checkInstalled(manifest);
+		request.onsuccess = function () {
+			callback(request.result);
+		};
+	} else {
+		callback();
+	}
 }
 
 function updateButtons () {
@@ -69,14 +83,13 @@ function updateButtons () {
 
 function updateButton (button) {
 	var method = button.dataset.web ? 'install' : 'installPackage',
-		manifest = makeAbsolute(button.dataset.manifest),
-		request;
+		manifest = makeAbsolute(button.dataset.manifest);
 	if (!navigator.mozApps[method]) {
 		return;
 	}
-	request = navigator.mozApps.checkInstalled(manifest);
-	request.onsuccess = function () {
-		if (request.result) {
+	checkInstalled(manifest, function (installed) {
+		var request;
+		if (installed) {
 			button.innerHTML = 'Already installed!&nbsp;<span style="color: green;">✔</span>';
 		} else {
 			button.addEventListener('click', function () {
@@ -93,7 +106,7 @@ function updateButton (button) {
 			button.innerHTML = 'Install';
 			button.disabled = false;
 		}
-	};
+	});
 }
 
 updateButtons();
