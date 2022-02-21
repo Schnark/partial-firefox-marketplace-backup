@@ -1,3 +1,4 @@
+/*global unescape*/
 (function () {
 "use strict";
 
@@ -8,8 +9,8 @@ var fakeMozApps = {
 	checkInstalled: function (manifest) {
 		var isCorrectUrl = /^https?:\/\/.*\.webapp$/.test(manifest),
 			installed = {
-			'https://schnark.github.io/partial-firefox-marketplace-backup/backup/webserver.webapp': true
-		};
+				'https://schnark.github.io/partial-firefox-marketplace-backup/backup/webserver.webapp': true
+			};
 		return fakeMozApps._makeRequest(function () {
 			return [isCorrectUrl, manifest in installed];
 		});
@@ -56,6 +57,19 @@ function makeAbsolute (url) {
 	return url;
 }
 
+/*keep this in sync with the simulator code*/
+function uToA (u) {
+	return btoa(
+		unescape(encodeURIComponent(u.replace(/\0+$/, '')))
+	).replace(/\s+/g, '')
+	.replace(/\+/g, '-').replace(/\//g, '_')
+	.replace(/\=+/g, '');
+}
+
+function makeSimulatorId (url) {
+	return 'url@' + uToA(url);
+}
+
 function checkInstalled (manifest, callback) {
 	var request;
 	if (manifest.slice(0, base.length) === base) {
@@ -69,14 +83,20 @@ function checkInstalled (manifest, callback) {
 }
 
 function updateButtons () {
-	var buttons, i;
-	if (!navigator.mozApps || !navigator.mozApps.checkInstalled) {
+	var buttons, i, mozApps, serviceWorker;
+	mozApps = navigator.mozApps && navigator.mozApps.checkInstalled;
+	serviceWorker = !mozApps && navigator.serviceWorker;
+	if (!mozApps && !serviceWorker) {
 		return;
 	}
 	buttons = document.getElementsByTagName('button');
 	for (i = 0; i < buttons.length; i++) {
 		if (buttons[i].dataset.manifest) {
-			updateButton(buttons[i]);
+			if (mozApps) {
+				updateButton(buttons[i]);
+			} else if (/*serviceWorker && */!buttons[i].dataset.web) {
+				updateButtonSimulator(buttons[i]);
+			}
 		}
 	}
 }
@@ -107,6 +127,15 @@ function updateButton (button) {
 			button.disabled = false;
 		}
 	});
+}
+
+function updateButtonSimulator (button) {
+	var manifest = makeAbsolute(button.dataset.manifest), id = makeSimulatorId(manifest);
+	button.addEventListener('click', function () {
+		location.href = base + 'ffos-simulator/index.html?mode=app&app=' + id;
+	});
+	button.innerHTML = 'Run in FFOS simulator';
+	button.disabled = false;
 }
 
 updateButtons();
